@@ -21,13 +21,16 @@ class SnliDataset(Dataset):
         self._label_mapper = SnliLabelMapper()
         self._items = []
         with open(json_file) as f:
-            for l in f:
+            for i, l in enumerate(f):
                 data = json.loads(l)
                 item = {"premise": data["sentence1"],
                         "hypothesis": data["sentence2"],
                         "label": data["gold_label"]
                         }
-
+                if item["label"] not in self._label_mapper.raw_labels:
+                    raise IndexError(
+                        "Loading Index {}: Label {} unexpected for premise {}".format(i, item["label"],
+                                                                                      item["premise"]))
                 self._items.append(item)
 
         self.logger.info("Loaded {} records from the dataset".format(len(self)))

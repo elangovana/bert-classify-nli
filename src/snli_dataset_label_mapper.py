@@ -8,10 +8,10 @@ class SnliLabelMapper(LabelMapperBase):
     """
 
     def __init__(self):
-        self._raw_labels = ["neutral", "entailment", "contradiction"]
-        self._map = {v: i for i, v in enumerate(self._raw_labels)}
+        self.raw_labels = ["neutral", "entailment", "contradiction"]
+        self._map = {v: i for i, v in enumerate(self.raw_labels)}
 
-        self._reverse_map = {i: v for i, v in enumerate(self._raw_labels)}
+        self._reverse_map = {i: v for i, v in enumerate(self.raw_labels)}
 
     def map(self, item) -> int:
         return self._map[item]
