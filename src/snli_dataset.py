@@ -8,7 +8,7 @@ from snli_dataset_label_mapper import SnliLabelMapper
 
 class SnliDataset(Dataset):
     """
-    The snli  dataset
+    The SNLI  dataset from https://nlp.stanford.edu/projects/snli/
     """
 
     @property
