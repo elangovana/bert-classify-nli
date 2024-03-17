@@ -30,6 +30,7 @@ class SnliDataset(Dataset):
 
                 if item["label"] == "-":
                     self._logger.info(f"Missing label in idx {i}.. hence skipping")
+                    continue
                 elif item["label"] not in self._label_mapper.raw_labels:
                     raise IndexError(
                         "Loading Index {}: Label {} unexpected for premise {}".format(i, item["label"], item["premise"]))
