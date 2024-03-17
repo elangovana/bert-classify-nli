@@ -12,7 +12,7 @@ class SnliDataset(Dataset):
     """
 
     @property
-    def logger(self):
+    def _logger(self):
         return logging.getLogger(__name__)
 
     def __init__(self, json_file: str, preprocessor=None):
@@ -27,12 +27,17 @@ class SnliDataset(Dataset):
                         "hypothesis": data["sentence2"],
                         "label": data["gold_label"]
                         }
-                if item["label"] not in self._label_mapper.raw_labels:
+
+                if item["label"] == "-":
+                    self._logger.info(f"Missing label in idx {i}.. hence skipping")
+                elif item["label"] not in self._label_mapper.raw_labels:
                     raise IndexError(
                         "Loading Index {}: Label {} unexpected for premise {}".format(i, item["label"], item["premise"]))
+
+
                 self._items.append(item)
 
-        self.logger.info("Loaded {} records from the dataset".format(len(self)))
+        self._logger.info("Loaded {} records from the dataset".format(len(self)))
 
     def __len__(self):
         return len(self._items)
