@@ -21,7 +21,7 @@ import sys
 import tempfile
 from unittest import TestCase
 
-from builder import Builder
+from builder_nli import BuilderNli
 
 
 class ItTestBertTrain(TestCase):
@@ -47,12 +47,12 @@ class ItTestBertTrain(TestCase):
         lr = 0.001
         grad_acc_steps = 2
 
-        train_data_file = os.path.join(os.path.dirname(__file__), "..", "imdb_original.tsv")
-        val_data_file = os.path.join(os.path.dirname(__file__), "..", "imdb_original.tsv")
-        b = Builder(train_data=train_data_file, val_data=val_data_file,  model_dir=modeldir,
-                    checkpoint_dir=checkpoint_dir, epochs=epochs,
-                    early_stopping_patience=earlystoppingpatience, batch_size=batch_size,
-                    grad_accumulation_steps=grad_acc_steps, learning_rate=lr)
+        train_data_file = os.path.join(os.path.dirname(__file__), "..", "sample_data", "snli_train.jsonl")
+        val_data_file = os.path.join(os.path.dirname(__file__), "..", "sample_data", "snli_train.jsonl")
+        b = BuilderNli(train_data=train_data_file, val_data=val_data_file, model_dir=modeldir,
+                       checkpoint_dir=checkpoint_dir, epochs=epochs,
+                       early_stopping_patience=earlystoppingpatience, batch_size=batch_size,
+                       grad_accumulation_steps=grad_acc_steps, learning_rate=lr)
 
         trainer = b.get_trainer()
 

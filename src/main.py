@@ -5,7 +5,7 @@ import os
 import pickle
 import sys
 
-from builder import Builder
+from builder_nli import BuilderNli
 
 
 def main():
@@ -53,10 +53,11 @@ def main():
     train_data_file = os.path.join(args.traindir, args.trainfile)
     val_data_file = os.path.join(args.valdir, args.valfile)
 
-    b = Builder(train_data=train_data_file, val_data=val_data_file,
-                checkpoint_dir=args.checkpointdir, epochs=args.epochs,
-                early_stopping_patience=args.earlystoppingpatience, batch_size=args.batch, max_seq_len=args.maxseqlen,
-                learning_rate=args.lr, fine_tune=args.finetune, model_dir=args.modeldir)
+    b = BuilderNli(train_data=train_data_file, val_data=val_data_file,
+                   checkpoint_dir=args.checkpointdir, epochs=args.epochs,
+                   early_stopping_patience=args.earlystoppingpatience, batch_size=args.batch,
+                   max_seq_len=args.maxseqlen,
+                   learning_rate=args.lr, fine_tune=args.finetune, model_dir=args.modeldir)
 
     trainer = b.get_trainer()
 
@@ -65,7 +66,7 @@ def main():
     with open(label_mapper_pickle_file, "wb") as f:
         pickle.dump(b.get_label_mapper(), f)
 
-    # Persist tokensier
+    # Persist tokenisor
     preprocessor_pickle_file = os.path.join(args.modeldir, "preprocessor.pkl")
     with open(preprocessor_pickle_file, "wb") as f:
         pickle.dump(b.get_preprocessor(), f)

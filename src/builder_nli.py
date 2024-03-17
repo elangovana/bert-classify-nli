@@ -1,4 +1,3 @@
-
 import logging
 import os
 
@@ -9,10 +8,6 @@ from transformers import BertTokenizer
 
 from bert_model import BertModel
 from bert_train import Train
-from imdb_dataset_label_mapper import ImdbLabelMapper
-
-from preprocessor_bert_tokeniser import PreprocessorBertTokeniser
-from imdb_dataset import ImdbDataset
 from preprocessor_nli_bert_tokeniser import PreprocessorNliBertTokeniser
 from snli_dataset import SnliDataset
 from snli_dataset_label_mapper import SnliLabelMapper
@@ -37,7 +32,11 @@ class BuilderNli:
         # Note: Since the max seq len for pos embedding is 512 , in the pretrained  bert this must be less than eq to 512
         # Also note increasing the length greater also will create GPU out of mememory error
         self._max_seq_len = max_seq_len
-        self.num_workers = num_workers or os.cpu_count() - 1
+        if num_workers is None:
+            self.num_workers = os.cpu_count() - 1
+        else:
+            self.num_workers = num_workers
+
         if self.num_workers <= 0:
             self.num_workers = 0
 
@@ -97,7 +96,6 @@ class BuilderNli:
 
         self._logger.info("Retrieving model complete")
 
-
         return self._network
 
     def get_train_dataset(self):
@@ -151,4 +149,3 @@ class BuilderNli:
                                   accumulation_steps=self.grad_accumulation_steps)
 
         return self._trainer
-

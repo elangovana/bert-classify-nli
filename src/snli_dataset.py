@@ -1,10 +1,8 @@
-import csv
 import json
 import logging
 
 from torch.utils.data import Dataset
 
-from imdb_dataset_label_mapper import ImdbLabelMapper
 from snli_dataset_label_mapper import SnliLabelMapper
 
 
@@ -21,11 +19,16 @@ class SnliDataset(Dataset):
         self.preprocessor = preprocessor
         self._file = json_file
         self._label_mapper = SnliLabelMapper()
-
+        self._items = []
         with open(json_file) as f:
-            data = json.load(f)
+            for l in f:
+                data = json.loads(l)
+                item = {"premise": data["sentence1"],
+                        "hypothesis": data["sentence2"],
+                        "label": data["gold_label"]
+                        }
 
-            self._items = data["rows"]
+                self._items.append(item)
 
         self.logger.info("Loaded {} records from the dataset".format(len(self)))
 
@@ -34,7 +37,7 @@ class SnliDataset(Dataset):
 
     def __getitem__(self, idx):
         row = self._items[idx]
-        x_prem, x_hype, y_raw = row["row"]["premise"],row["row"]["hypothesis"], row["row"]["label"]
+        x_prem, x_hype, y_raw = row["premise"], row["hypothesis"], row["label"]
 
         # The original label is 1 indexed, this needs to be converted to zero index
         y = self._label_mapper.map(y_raw)
