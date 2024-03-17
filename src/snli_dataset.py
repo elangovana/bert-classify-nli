@@ -8,7 +8,7 @@ from snli_dataset_label_mapper import SnliLabelMapper
 
 class SnliDataset(Dataset):
     """
-    The snli  dataset as formatted by huggingface dataset
+    The snli  dataset
     """
 
     @property
