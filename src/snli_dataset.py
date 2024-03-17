@@ -29,8 +29,7 @@ class SnliDataset(Dataset):
                         }
                 if item["label"] not in self._label_mapper.raw_labels:
                     raise IndexError(
-                        "Loading Index {}: Label {} unexpected for premise {}".format(i, item["label"],
-                                                                                      item["premise"]))
+                        "Loading Index {}: Label {} unexpected for premise {}".format(i, item["label"], item["premise"]))
                 self._items.append(item)
 
         self.logger.info("Loaded {} records from the dataset".format(len(self)))
