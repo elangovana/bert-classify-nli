@@ -4,6 +4,7 @@ import logging
 import os.path
 import sys
 
+import boto3
 from sagemaker.processing import ProcessingInput, ProcessingOutput
 from sagemaker.pytorch.processing import PyTorchProcessor
 
@@ -15,7 +16,9 @@ def run_processing_job(role, s3_data_file, s3_output_base, endpoint_name):
         role=role,
         instance_type='ml.m5.xlarge',
         instance_count=1,
-        base_job_name='frameworkprocessor-PT'
+        env = {
+            "AWS_DEFAULT_REGION":boto3.session.Session().region_name
+        }
     )
 
     job_name = "snli-evaluate-{}".format(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
