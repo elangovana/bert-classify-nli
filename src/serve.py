@@ -1,5 +1,3 @@
-
-
 import glob
 import json
 import os
@@ -44,8 +42,8 @@ def get_device():
 
 
 def input_fn(input, content_type):
-    if content_type == CSV_CONTENT_TYPE:
-        records = input.split("\n")
+    if content_type == JSON_CONTENT_TYPE:
+        records = json.loads(input)
         return records
     else:
         raise ValueError(
@@ -53,7 +51,7 @@ def input_fn(input, content_type):
 
 
 def preprocess(input, preprocessor):
-    result = [preprocessor(i).unsqueeze(dim=0) for i in input]
+    result = [preprocessor((row["premise"], row["hypothesis"])).unsqueeze(dim=0) for row in input]
     result = torch.cat(result)
     return result
 
@@ -81,7 +79,7 @@ def predict_fn(input, model_artifacts):
     classes = [label_mapper.reverse_map(i.item()) for i in class_indices]
     result = []
     for c, p in zip(classes, prob):
-        result.append({c: p.item()})
+        result.append({"label": c, "confidence": p.item()})
 
     return result
 
