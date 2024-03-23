@@ -20,6 +20,7 @@ class Evaluate:
 
         correct_predictions = 0
         for i in range(0, len(items), batch_size):
+
             batch = items[i: i + batch_size]
 
             response = self.client.invoke_endpoint(
@@ -37,6 +38,7 @@ class Evaluate:
                 if bi["predicted_label"] == bi["label"]: correct_predictions += 1
 
             result.extend(batch)
+            self._logger.info("Completed {} out {}".format(len(result), len(items)))
 
         accuracy = 100 * correct_predictions / len(result)
         self._logger.info(f"% Accuracy == {accuracy}")
@@ -91,7 +93,7 @@ def main():
 
     print(args.__dict__)
 
-    Evaluate().run(args.testjson,  args.modelendpoint,args.outputdir)
+    Evaluate().run(args.testjson, args.modelendpoint, args.outputdir)
 
 
 if "__main__" == __name__:
