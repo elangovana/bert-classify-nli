@@ -10,7 +10,8 @@ from sagemaker.pytorch.processing import PyTorchProcessor
 
 def run_processing_job(role, s3_data_file, s3_output_base, endpoint_name):
     pytorch_processor = PyTorchProcessor(
-        framework_version='1.8',
+        py_version="py38",
+        framework_version='1.12.0',
         role=role,
         instance_type='ml.m5.xlarge',
         instance_count=1,
